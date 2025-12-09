@@ -1,27 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { Progress } from '@/components/ui/progress'
-import { Badge } from '@/components/ui/badge'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { 
-  Upload, 
-  FileVideo, 
-  Type, 
-  Image as ImageIcon, 
-  Sparkles, 
-  Download,
-  Play,
-  Zap,
-  Globe,
-  Star,
-  Info
-} from 'lucide-react'
+import { Upload, FileVideo, Type, ImageIcon, Sparkles, Download, Play, Zap, Globe, Star, Info } from 'lucide-react'
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState('image-to-video')
@@ -29,8 +9,6 @@ export default function Home() {
   const [textInput, setTextInput] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [researchData, setResearchData] = useState<string>('')
-  const [isLoadingResearch, setIsLoadingResearch] = useState(false)
   const [generatedVideo, setGeneratedVideo] = useState<string | null>(null)
   const [videoError, setVideoError] = useState<string | null>(null)
 
@@ -38,21 +16,6 @@ export default function Home() {
     const file = event.target.files?.[0]
     if (file) {
       setUploadedImage(file)
-    }
-  }
-
-  const loadResearchData = async () => {
-    setIsLoadingResearch(true)
-    try {
-      const response = await fetch('/.netlify/functions/research')
-      const result = await response.json()
-      if (result.success) {
-        setResearchData(result.data)
-      }
-    } catch (error) {
-      console.error('Error loading research data:', error)
-    } finally {
-      setIsLoadingResearch(false)
     }
   }
 
@@ -162,8 +125,8 @@ export default function Home() {
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-2000"></div>
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse animation-delay-4000"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-pink-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse" style={{animationDelay: '4s'}}></div>
       </div>
 
       {/* Main content */}
@@ -185,89 +148,61 @@ export default function Home() {
             Ubah Gambar dan Teks Menjadi Video Menakjubkan dengan AI
           </p>
           <div className="flex items-center justify-center gap-4 flex-wrap">
-            <Badge variant="secondary" className="bg-green-500/20 text-green-300 border-green-500/30">
-              <Zap className="w-3 h-3 mr-1" />
+            <span className="bg-green-500/20 text-green-300 border border-green-500/30 px-3 py-1 rounded-full text-sm">
+              <Zap className="w-3 h-3 inline mr-1" />
               100% Gratis
-            </Badge>
-            <Badge variant="secondary" className="bg-blue-500/20 text-blue-300 border-blue-500/30">
-              <Globe className="w-3 h-3 mr-1" />
+            </span>
+            <span className="bg-blue-500/20 text-blue-300 border border-blue-500/30 px-3 py-1 rounded-full text-sm">
+              <Globe className="w-3 h-3 inline mr-1" />
               Tanpa Batasan
-            </Badge>
-            <Badge variant="secondary" className="bg-purple-500/20 text-purple-300 border-purple-500/30">
-              <Star className="w-3 h-3 mr-1" />
+            </span>
+            <span className="bg-purple-500/20 text-purple-300 border border-purple-500/30 px-3 py-1 rounded-full text-sm">
+              <Star className="w-3 h-3 inline mr-1" />
               Kualitas HD
-            </Badge>
-            
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-                  onClick={loadResearchData}
-                >
-                  <Info className="w-4 h-4 mr-2" />
-                  Info API Gratis
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-slate-900 border-white/20 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle className="text-xl font-bold text-white">
-                    🎯 API Video Generation Gratis
-                  </DialogTitle>
-                  <DialogDescription className="text-gray-300">
-                    Informasi lengkap tentang API gratis yang bisa digunakan untuk video generation
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="mt-4">
-                  {isLoadingResearch ? (
-                    <div className="flex items-center justify-center py-8">
-                      <div className="w-8 h-8 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    </div>
-                  ) : (
-                    <div className="prose prose-invert max-w-none">
-                      <pre className="whitespace-pre-wrap text-sm text-gray-300 font-mono bg-black/30 p-4 rounded-lg">
-                        {researchData || 'Klik tombol untuk memuat informasi API...'}
-                      </pre>
-                    </div>
-                  )}
-                </div>
-              </DialogContent>
-            </Dialog>
+            </span>
           </div>
         </header>
 
         {/* Main converter */}
         <div className="max-w-4xl mx-auto">
-          <Card className="bg-white/10 backdrop-blur-lg border-white/20 shadow-2xl">
-            <CardHeader className="text-center pb-4">
-              <CardTitle className="text-2xl text-white">Pilih Jenis Konversi</CardTitle>
-              <CardDescription className="text-gray-300">
-                Upload gambar atau ketik teks untuk membuat video AI yang menakjubkan
-              </CardDescription>
-            </CardHeader>
-            
-            <CardContent className="p-6">
-              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 mb-8 bg-white/10 border-white/20">
-                  <TabsTrigger 
-                    value="image-to-video" 
-                    className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-gray-300"
-                  >
-                    <ImageIcon className="w-4 h-4 mr-2" />
-                    Gambar ke Video
-                  </TabsTrigger>
-                  <TabsTrigger 
-                    value="text-to-video" 
-                    className="data-[state=active]:bg-white/20 data-[state=active]:text-white text-gray-300"
-                  >
-                    <Type className="w-4 h-4 mr-2" />
-                    Teks ke Video
-                  </TabsTrigger>
-                </TabsList>
+          <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg shadow-2xl">
+            <div className="p-6">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl text-white mb-2">Pilih Jenis Konversi</h2>
+                <p className="text-gray-300">
+                  Upload gambar atau ketik teks untuk membuat video AI yang menakjubkan
+                </p>
+              </div>
+              
+              {/* Tabs */}
+              <div className="flex space-x-2 mb-8 bg-white/10 p-1 rounded-lg">
+                <button
+                  onClick={() => setActiveTab('image-to-video')}
+                  className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                    activeTab === 'image-to-video' 
+                      ? 'bg-white/20 text-white' 
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  <ImageIcon className="w-4 h-4 inline mr-2" />
+                  Gambar ke Video
+                </button>
+                <button
+                  onClick={() => setActiveTab('text-to-video')}
+                  className={`flex-1 py-2 px-4 rounded-md transition-colors ${
+                    activeTab === 'text-to-video' 
+                      ? 'bg-white/20 text-white' 
+                      : 'text-gray-300 hover:text-white'
+                  }`}
+                >
+                  <Type className="w-4 h-4 inline mr-2" />
+                  Teks ke Video
+                </button>
+              </div>
 
-                {/* Image to Video Tab */}
-                <TabsContent value="image-to-video" className="space-y-6">
+              {/* Image to Video Tab */}
+              {activeTab === 'image-to-video' && (
+                <div className="space-y-6">
                   <div className="text-center">
                     <div className="border-2 border-dashed border-white/30 rounded-lg p-8 hover:border-white/50 transition-colors">
                       <input
@@ -308,8 +243,8 @@ export default function Home() {
                     <div className="space-y-4">
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <Label className="text-white text-sm">Durasi Video</Label>
-                          <select className="w-full mt-1 p-2 rounded bg-white/10 border border-white/20 text-white">
+                          <label className="text-white text-sm block mb-1">Durasi Video</label>
+                          <select className="w-full p-2 rounded bg-white/10 border border-white/20 text-white">
                             <option>5 detik</option>
                             <option>10 detik</option>
                             <option>15 detik</option>
@@ -317,8 +252,8 @@ export default function Home() {
                           </select>
                         </div>
                         <div>
-                          <Label className="text-white text-sm">Gaya Animasi</Label>
-                          <select className="w-full mt-1 p-2 rounded bg-white/10 border border-white/20 text-white">
+                          <label className="text-white text-sm block mb-1">Gaya Animasi</label>
+                          <select className="w-full p-2 rounded bg-white/10 border border-white/20 text-white">
                             <option>Smooth Motion</option>
                             <option>Cinematic</option>
                             <option>Dynamic</option>
@@ -327,44 +262,46 @@ export default function Home() {
                         </div>
                       </div>
                       
-                      <Button 
+                      <button
                         onClick={handleImageToVideo}
                         disabled={isProcessing}
-                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3"
+                        className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 rounded-lg disabled:opacity-50"
                       >
                         {isProcessing ? (
                           <>
-                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline mr-2"></div>
                             Memproses...
                           </>
                         ) : (
                           <>
-                            <FileVideo className="w-4 h-4 mr-2" />
+                            <FileVideo className="w-4 h-4 inline mr-2" />
                             Buat Video dari Gambar
                           </>
                         )}
-                      </Button>
+                      </button>
                     </div>
                   )}
-                </TabsContent>
+                </div>
+              )}
 
-                {/* Text to Video Tab */}
-                <TabsContent value="text-to-video" className="space-y-6">
+              {/* Text to Video Tab */}
+              {activeTab === 'text-to-video' && (
+                <div className="space-y-6">
                   <div className="space-y-4">
                     <div>
-                      <Label className="text-white text-sm">Deskripsi Video</Label>
-                      <Textarea
+                      <label className="text-white text-sm block mb-1">Deskripsi Video</label>
+                      <textarea
                         value={textInput}
                         onChange={(e) => setTextInput(e.target.value)}
                         placeholder="Deskripsikan video yang ingin Anda buat. Contoh: 'Sebuah matahari terbenam yang indah di pantai dengan ombak yang tenang dan awan oranye yang indah'"
-                        className="mt-1 min-h-32 bg-white/10 border-white/20 text-white placeholder-gray-400"
+                        className="w-full min-h-32 p-3 rounded bg-white/10 border border-white/20 text-white placeholder-gray-400"
                       />
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-white text-sm">Durasi Video</Label>
-                        <select className="w-full mt-1 p-2 rounded bg-white/10 border border-white/20 text-white">
+                        <label className="text-white text-sm block mb-1">Durasi Video</label>
+                        <select className="w-full p-2 rounded bg-white/10 border border-white/20 text-white">
                           <option>10 detik</option>
                           <option>15 detik</option>
                           <option>30 detik</option>
@@ -372,8 +309,8 @@ export default function Home() {
                         </select>
                       </div>
                       <div>
-                        <Label className="text-white text-sm">Gaya Video</Label>
-                        <select className="w-full mt-1 p-2 rounded bg-white/10 border-white/20 text-white">
+                        <label className="text-white text-sm block mb-1">Gaya Video</label>
+                        <select className="w-full p-2 rounded bg-white/10 border border-white/20 text-white">
                           <option>Realistis</option>
                           <option>Animasi</option>
                           <option>Sinematik</option>
@@ -383,40 +320,40 @@ export default function Home() {
                     </div>
 
                     <div>
-                      <Label className="text-white text-sm">Aspect Ratio</Label>
-                      <div className="grid grid-cols-3 gap-2 mt-1">
-                        <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                      <label className="text-white text-sm block mb-1">Aspect Ratio</label>
+                      <div className="grid grid-cols-3 gap-2">
+                        <button className="p-2 bg-white/10 border border-white/20 text-white rounded hover:bg-white/20">
                           16:9
-                        </Button>
-                        <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                        </button>
+                        <button className="p-2 bg-white/10 border border-white/20 text-white rounded hover:bg-white/20">
                           9:16
-                        </Button>
-                        <Button variant="outline" size="sm" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
+                        </button>
+                        <button className="p-2 bg-white/10 border border-white/20 text-white rounded hover:bg-white/20">
                           1:1
-                        </Button>
+                        </button>
                       </div>
                     </div>
                     
-                    <Button 
+                    <button
                       onClick={handleTextToVideo}
                       disabled={isProcessing || !textInput.trim()}
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3"
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium py-3 rounded-lg disabled:opacity-50"
                     >
                       {isProcessing ? (
                         <>
-                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin inline mr-2"></div>
                           Memproses...
                         </>
                       ) : (
                         <>
-                          <Sparkles className="w-4 h-4 mr-2" />
+                          <Sparkles className="w-4 h-4 inline mr-2" />
                           Buat Video dari Teks
                         </>
                       )}
-                    </Button>
+                    </button>
                   </div>
-                </TabsContent>
-              </Tabs>
+                </div>
+              )}
 
               {/* Progress Bar */}
               {isProcessing && (
@@ -425,7 +362,12 @@ export default function Home() {
                     <span>Memproses video Anda...</span>
                     <span>{progress}%</span>
                   </div>
-                  <Progress value={progress} className="h-2 bg-white/20" />
+                  <div className="w-full bg-white/20 rounded-full h-2">
+                    <div 
+                      className="bg-gradient-to-r from-purple-600 to-pink-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
                 </div>
               )}
 
@@ -444,18 +386,20 @@ export default function Home() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                        <button 
+                          className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded hover:bg-white/20"
                           onClick={() => setGeneratedVideo(null)}
                         >
                           Buat Video Baru
-                        </Button>
-                        <Button className="bg-green-600 hover:bg-green-700">
+                        </button>
+                        <a 
+                          href={generatedVideo} 
+                          download
+                          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded inline-flex items-center"
+                        >
                           <Download className="w-4 h-4 mr-2" />
                           Unduh Video
-                        </Button>
+                        </a>
                       </div>
                     </div>
                     
@@ -467,7 +411,7 @@ export default function Home() {
                         className="w-full h-auto max-h-96"
                         preload="metadata"
                       >
-                        Your browser does not support the video tag.
+                        Your browser does not support video tag.
                       </video>
                     </div>
                     
@@ -507,69 +451,49 @@ export default function Home() {
                         <p className="text-gray-300 text-sm">{videoError}</p>
                       </div>
                     </div>
-                    <Button 
-                      variant="outline" 
-                      className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                    <button 
+                      className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded hover:bg-white/20"
                       onClick={() => {
                         setVideoError(null)
                         setProgress(0)
                       }}
                     >
                       Coba Lagi
-                    </Button>
+                    </button>
                   </div>
                 </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
           {/* Features */}
           <div className="mt-12 grid md:grid-cols-3 gap-6">
-            <Card className="bg-white/10 backdrop-blur-lg border-white/20">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Zap className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-white font-semibold mb-2">Super Cepat</h3>
-                <p className="text-gray-300 text-sm">Video siap dalam hitungan detik dengan teknologi AI canggih</p>
-              </CardContent>
-            </Card>
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-6 text-center">
+              <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Zap className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-white font-semibold mb-2">Super Cepat</h3>
+              <p className="text-gray-300 text-sm">Video siap dalam hitungan detik dengan teknologi AI canggih</p>
+            </div>
 
-            <Card className="bg-white/10 backdrop-blur-lg border-white/20">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Star className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-white font-semibold mb-2">Kualitas Premium</h3>
-                <p className="text-gray-300 text-sm">Video berkualitas tinggi hingga resolusi Full HD</p>
-              </CardContent>
-            </Card>
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-6 text-center">
+              <div className="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Star className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-white font-semibold mb-2">Kualitas Premium</h3>
+              <p className="text-gray-300 text-sm">Video berkualitas tinggi hingga resolusi Full HD</p>
+            </div>
 
-            <Card className="bg-white/10 backdrop-blur-lg border-white/20">
-              <CardContent className="p-6 text-center">
-                <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Globe className="w-6 h-6 text-white" />
-                </div>
-                <h3 className="text-white font-semibold mb-2">100% Gratis</h3>
-                <p className="text-gray-300 text-sm">Tanpa biaya tersembunyi, tanpa batasan penggunaan</p>
-              </CardContent>
-            </Card>
+            <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-lg p-6 text-center">
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Globe className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-white font-semibold mb-2">100% Gratis</h3>
+              <p className="text-gray-300 text-sm">Tanpa biaya tersembunyi, tanpa batasan penggunaan</p>
+            </div>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 0.2; }
-          50% { opacity: 0.4; }
-        }
-        .animation-delay-2000 {
-          animation-delay: 2s;
-        }
-        .animation-delay-4000 {
-          animation-delay: 4s;
-        }
-      `}</style>
     </div>
   )
 }
